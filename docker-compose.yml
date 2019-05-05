@@ -1,0 +1,27 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: sports-event-bot-api
+    restart: always
+    environment:
+      - MONGODB_HOST=sports-event-bot-mongo-database
+      - MONGODB_PORT=27017
+      - MONGODB_DB=sportevents
+      - WS_URL=https://www.ole.com.ar/wg-agenda-deportiva/json/agenda.json
+      - FUTBOL_NAME=Fútbol
+      - TELEGRAM_BOT_TOKEN=
+    depends_on:
+      - mongo-database
+    networks:
+      - sports-event-bot-api
+  mongo-database:
+    image: mongo:4.0
+    restart: always
+    container_name: sports-event-bot-mongo-database
+    networks:
+      - sports-event-bot-api
+networks:
+  sports-event-bot-api:

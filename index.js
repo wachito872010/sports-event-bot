@@ -1,7 +1,7 @@
 'use strict';
 require('dotenv').config();
-const updateData = require('./utils/update-data');
-const schedule = require('./utils/schedule');
+const schedule = require('./data-loader/schedule');
+const bot = require('./bot/index');
 
 function connectMongoose() {
     const mongoose = require('mongoose');
@@ -11,7 +11,8 @@ function connectMongoose() {
 
 return connectMongoose()
     .then(() => {
-        return schedule();
+        schedule();
+        bot();
     })
     .catch((error) => {
         console.error(`PROCESS ERROR: ${error.message}`);

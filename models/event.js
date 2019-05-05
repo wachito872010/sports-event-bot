@@ -14,4 +14,16 @@ const eventSchema = new mongoose.Schema({
   timestamps: true
 });
 
+eventSchema.statics.thisWeek = function() {
+  let today = new Date();
+  today.setHours(3, 0, 0, 0);
+  return this.find({
+    date: {
+      $gt: today
+    }
+  })
+    .sort('date')
+    .populate('tournament');
+}
+
 module.exports = mongoose.model('Event', eventSchema);

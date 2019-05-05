@@ -14,6 +14,8 @@ services:
       - WS_URL=https://www.ole.com.ar/wg-agenda-deportiva/json/agenda.json
       - FUTBOL_NAME=Fútbol
       - TELEGRAM_BOT_TOKEN=
+      - TELEGRAM_BOT_WEBHOOK_PATH=webhookToChange
+      - EXTERNAL_URL=http://localhost:3000/
     depends_on:
       - mongo-database
     networks:

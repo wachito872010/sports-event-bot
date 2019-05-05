@@ -5,6 +5,7 @@ const SessionWare = require('botmaster-session-ware');
 const {User} = require('../models');
 const configTournaments = require('./config-tournaments');
 const weekEvents = require('./week-events');
+const setTelegramWebhook = require('./set-telegram-webhook');
 
 const botmaster = new Botmaster({
   port: process.env.BOTMASTER_PORT
@@ -13,10 +14,11 @@ botmaster.addBot(new TelegramBot({
   credentials: {
     authToken: process.env.TELEGRAM_BOT_TOKEN,
   },
-  webhookEndpoint: '/webhookIhLjl/',
+  webhookEndpoint: `/${process.env.TELEGRAM_BOT_WEBHOOK_PATH}/`,
 }));
 const sessionWare = SessionWare();
 botmaster.useWrapped(sessionWare.incoming, sessionWare.outgoing);
+setTelegramWebhook();
 
 function init() {
   botmaster.use({

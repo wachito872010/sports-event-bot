@@ -29,22 +29,23 @@ function showDeniedTournaments(bot, update) {
 
 function showListToDenyTournament(bot, update) {
   update.session.status = 'deny_tournament';
-  Tournament.find()
+  Tournament.find({
+    _id: {
+      $nin: update.user.deniedTournaments
+    }
+  })
     .sort('name')
     .limit(9)
     .skip((update.session.page - 1) * 8)
     .then((tournaments) => {
-      let nonDenied = tournaments.filter((elem) => {
-        return update.user.deniedTournaments.indexOf(elem._id.toString()) < 0;
-      });
-      if (nonDenied.length === 0) {
+      if (tournaments.length === 0) {
         return bot.reply(update, 'No hay torneos para agregar a la lista\n');
       }
       const btnOptions = [];
-      nonDenied.forEach((elem) => {
+      tournaments.forEach((elem) => {
         btnOptions.push(elem.name);
       });
-      if (nonDenied.length === 9) {
+      if (tournaments.length === 9) {
         btnOptions.pop();
         if (update.session.page > 1) {
           btnOptions.push('Ver menos...');

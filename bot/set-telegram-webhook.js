@@ -5,7 +5,7 @@ function setTelegramWebhook() {
   return request({
     uri: `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/setWebhook`,
     body: {
-      url: `${process.env.EXTERNAL_URL}${process.env.TELEGRAM_BOT_WEBHOOK_PATH}/`
+      url: `${process.env.EXTERNAL_URL}telegram/${process.env.TELEGRAM_BOT_WEBHOOK_PATH}/`
     },
     json: true
   });

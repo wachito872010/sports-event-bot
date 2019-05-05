@@ -6,7 +6,9 @@ const {User} = require('../models');
 const configTournaments = require('./config-tournaments');
 const weekEvents = require('./week-events');
 
-const botmaster = new Botmaster();
+const botmaster = new Botmaster({
+  port: process.env.BOTMASTER_PORT
+});
 botmaster.addBot(new TelegramBot({
   credentials: {
     authToken: process.env.TELEGRAM_BOT_TOKEN,
@@ -28,27 +30,6 @@ function init() {
         })
         .catch(error => {
           console.error(`User info error: ${error.message}`);
-          return bot.reply(update, 'Me rompí');
-        });
-    }
-  });
-
-  botmaster.use({
-    type: 'incoming',
-    name: '/test',
-    controller: (bot, update, next) => {
-      if (update.message.text !== '/test') {
-        return next();
-      }
-      const btnOptions = ['Opcion 1', 'Opcion 2'];
-      console.log(btnOptions);
-      console.log(update.sender.id);
-      return bot.sendDefaultButtonMessageTo(btnOptions, 'Seleccione una opcion:', update.sender.id)
-      // return bot.sendTextCascadeTo(['Hi there, I`m about to ask you to press buttons:',
-      //   'Please press any of: ["Button1","Button2"]',
-      //   'Thank you'], update.sender.id)
-        .catch(error => {
-          console.error(`/test error: ${error.message}`);
           return bot.reply(update, 'Me rompí');
         });
     }

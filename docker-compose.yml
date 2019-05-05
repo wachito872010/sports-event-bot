@@ -4,11 +4,11 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: sports-event-bot-api
+    container_name: sport-events-bot-api
     restart: always
     environment:
       - BOTMASTER_PORT=3000
-      - MONGODB_HOST=sports-event-bot-mongo-database
+      - MONGODB_HOST=sport-events-bot-mongo-database
       - MONGODB_PORT=27017
       - MONGODB_DB=sportevents
       - WS_URL=https://www.ole.com.ar/wg-agenda-deportiva/json/agenda.json
@@ -17,12 +17,12 @@ services:
     depends_on:
       - mongo-database
     networks:
-      - sports-event-bot-api
+      - sport-events-bot-api
   mongo-database:
-    image: mongo:4.0
+    image: mongo:4
     restart: always
-    container_name: sports-event-bot-mongo-database
+    container_name: sport-events-bot-mongo-database
     networks:
-      - sports-event-bot-api
+      - sport-events-bot-api
 networks:
-  sports-event-bot-api:
+  sport-events-bot-api:

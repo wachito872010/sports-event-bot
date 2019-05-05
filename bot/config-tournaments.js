@@ -4,16 +4,17 @@ const {Tournament} = require('../models');
 function showDeniedTournaments(bot, update) {
   update.session.status = 'config_tournaments';
   update.session.substatus = 'list';
-  Tournament.find()
+  Tournament.find({
+    _id: {
+      $in: update.user.deniedTournaments
+    }
+  })
     .then((tournaments) => {
       let message = 'TORNEOS SIN INTERÉS:\n';
-      let denied = tournaments.filter((elem) => {
-        return update.user.deniedTournaments.indexOf(elem._id.toString()) >= 0;
-      });
-      if (denied.length === 0) {
+      if (tournaments.length === 0) {
         message += 'No hay torneos en la lista\n';
       } else {
-        denied.forEach((elem) => {
+        tournaments.forEach((elem) => {
           message += `- ${elem.name}\n`;
         });
       }
@@ -47,12 +48,12 @@ function showListToDenyTournament(bot, update) {
       });
       if (tournaments.length === 9) {
         btnOptions.pop();
-        if (update.session.page > 1) {
-          btnOptions.push('Ver menos...');
-        }
         btnOptions.push('Ver mas...');
       }
-      return bot.sendDefaultButtonMessageTo(btnOptions, 'Seleccione un torneo para agregar a la lista:', update.sender.id)
+      if (update.session.page > 1) {
+        btnOptions.push('Ver menos...');
+      }
+      return bot.sendDefaultButtonMessageTo(btnOptions, 'Seleccione un torneo para agregar a la lista:', update.sender.id);
     })
     .catch((error) => {
       console.error(`showListToDenyTournament error: ${error.message}`);
@@ -89,33 +90,28 @@ function denyTournament(bot, update) {
 
 function showListToAllowTournament(bot, update) {
   update.session.status = 'allow_tournament';
-  Tournament.find()
+  Tournament.find({
+    _id: {
+      $in: update.user.deniedTournaments
+    }
+  })
+    .sort('name')
+    .limit(9)
+    .skip((update.session.page - 1) * 8)
     .then((tournaments) => {
-      let denied = tournaments.filter((elem) => {
-        return update.user.deniedTournaments.indexOf(elem._id.toString()) >= 0;
-      });
-      if (denied.length === 0) {
+      if (tournaments.length === 0) {
         return bot.reply('No hay torneos en la lista.');
       }
-      let btnOptions = []
-      denied.forEach((elem) => {
+      const btnOptions = [];
+      tournaments.forEach((elem) => {
         btnOptions.push(elem.name);
       });
-      if (denied.length > 3) {
-        for (let i = 0; i < (update.session.page - 1) * 2; i++) {
-          btnOptions.shift();
-        }
-        let areMore = false;
-        while (btnOptions.length > 2) {
-          areMore = true;
-          btnOptions.pop();
-        }
-        if (update.session.page > 1) {
-          btnOptions.push('Ver menos...');
-        }
-        if (areMore) {
-          btnOptions.push('Ver mas...');
-        }
+      if (tournaments.length === 9) {
+        btnOptions.pop();
+        btnOptions.push('Ver mas...');
+      }
+      if (update.session.page > 1) {
+        btnOptions.push('Ver menos...');
       }
       return bot.sendDefaultButtonMessageTo(btnOptions, 'Seleccione un torneo para agregar a la lista:', update.sender.id)
     })

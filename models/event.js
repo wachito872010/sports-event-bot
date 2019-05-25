@@ -26,7 +26,7 @@ eventSchema.statics.thisWeek = function() {
     .populate('tournament');
 }
 
-eventSchema.statics.tpday = function() {
+eventSchema.statics.today = function() {
   let today = new Date();
   today.setHours(3, 0, 0, 0);
   let tomorrow = new Date(today);

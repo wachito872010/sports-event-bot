@@ -26,4 +26,19 @@ eventSchema.statics.thisWeek = function() {
     .populate('tournament');
 }
 
+eventSchema.statics.tpday = function() {
+  let today = new Date();
+  today.setHours(3, 0, 0, 0);
+  let tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  return this.find({
+    date: {
+      $gte: today,
+      $lt: tomorrow
+    }
+  })
+    .sort('date')
+    .populate('tournament');
+}
+
 module.exports = mongoose.model('Event', eventSchema);

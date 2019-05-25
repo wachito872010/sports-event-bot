@@ -5,6 +5,7 @@ const SessionWare = require('botmaster-session-ware');
 const {User} = require('../models');
 const configTournaments = require('./config-tournaments');
 const weekEvents = require('./week-events');
+const todayEvents = require('./today-events');
 const setTelegramWebhook = require('./set-telegram-webhook');
 
 const botmaster = new Botmaster({
@@ -41,6 +42,12 @@ function init() {
     type: 'incoming',
     name: 'Week events',
     controller: weekEvents
+  });
+
+  botmaster.use({
+    type: 'incoming',
+    name: 'Today events',
+    controller: todayEvents
   });
 
   botmaster.use({

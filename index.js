@@ -1,5 +1,6 @@
 'use strict';
 require('dotenv').config();
+require('module-alias/register');
 const schedule = require('./data-loader/schedule');
 const bot = require('./bot/index');
 

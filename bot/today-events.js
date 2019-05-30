@@ -1,5 +1,5 @@
 'use strict';
-const {Event} = require('../models');
+const {Event} = require('@root/models');
 const moment = require('moment');
 
 function showTodayEvents(bot, update) {

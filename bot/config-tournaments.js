@@ -1,5 +1,5 @@
 'use strict';
-const {Tournament} = require('../models');
+const {Tournament} = require('@root/models');
 
 function showDeniedTournaments(bot, update) {
   update.session.status = 'config_tournaments';
